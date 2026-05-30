@@ -1,59 +1,119 @@
-# SistemaPruebasFront
+# SistemaPruebas Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.13.
+Este proyecto es el frontend de **SistemaPruebas**, desarrollado con **Angular** y **Tailwind CSS**, pensado para interactuar con un backend Laravel vía API RESTful.
 
-## Development server
+---
 
-To start a local development server, run:
+## Especificaciones del entorno
+
+- **Angular CLI**: 21.2.13
+- **Node.js**: 22.22.3
+- **npm**: 10.9.8
+- **Sistema Operativo**: Windows (win32 x64)
+- **CSS**: Tailwind CSS
+
+---
+
+## Instalación
+
+1. **Clona el repositorio**
+    ```bash
+    git clone https://github.com/TU_USUARIO/TU_REPO_FRONTEND.git
+    cd TU_REPO_FRONTEND
+    ```
+
+2. **Instala las dependencias**
+    ```bash
+    npm install
+    ```
+
+3. **Configura las variables de entorno**
+    - Si usas ambientes personalizados, puedes crear un archivo `src/environments/environment.ts` y especificar ahí la URL del backend, por ejemplo:
+      ```typescript
+      export const environment = {
+        production: false,
+        apiUrl: 'http://localhost:8000/api'
+      };
+      ```
+
+---
+
+## Ejecución del proyecto en desarrollo
 
 ```bash
 ng serve
 ```
+- Accede a la aplicación desde: [http://localhost:4200](http://localhost:4200)
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Compilación para producción
 
 ```bash
-ng generate --help
+ng build --configuration=production
+```
+- Los archivos de salida estarán en la carpeta `/dist`.
+
+---
+
+## Configuración y uso de Tailwind CSS
+
+- Tailwind CSS ya viene preconfigurado.
+- Utiliza las clases de Tailwind directamente en tus templates `.html`.
+
+---
+
+## Estructura de carpetas principal
+
+```
+src/
+ ├─ app/
+ │   ├─ pages/
+ │   ├─ components/
+ │   ├─ services/
+ │   └─ ...
+ ├─ assets/
+ ├─ environments/
+ ├─ index.html
+ └─ main.ts
 ```
 
-## Building
+---
 
-To build the project run:
+## Recomendaciones
 
-```bash
-ng build
-```
+- Utiliza Node.js 22+ y npm 10+ como versiones mínimas para evitar incompatibilidades.
+- Si usas Angular HTTP para consumir tu backend, asegúrate de tener bien configurado CORS en el backend.
+- Ten a mano el token de autenticación para acceder a rutas protegidas.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+## Contribución y desarrollo
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+1. Crea una rama para tu feature:
+    ```bash
+    git checkout -b mi-feature
+    ```
+2. Haz tus cambios y commitea:
+    ```bash
+    git add .
+    git commit -m "Tu mensaje"
+    ```
+3. Sube los cambios y abre un Pull Request.
 
-```bash
-ng test
-```
+---
 
-## Running end-to-end tests
+## Recursos útiles
 
-For end-to-end (e2e) testing, run:
+- [Documentación Angular](https://angular.io/docs)
+- [Documentación Tailwind CSS](https://tailwindcss.com/docs)
+- [Documentación Node.js](https://nodejs.org/es/docs)
+- [Documentación NPM](https://docs.npmjs.com/)
 
-```bash
-ng e2e
-```
+---
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Créditos
 
-## Additional Resources
+Desarrollado por Ali Astete Romero .
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---

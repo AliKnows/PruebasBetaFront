@@ -18,10 +18,9 @@ export class Dashboard {
   isSidebarOpen = signal(true);
 
   menuItems: Array<{ icon: string; label: string; path: string }> = [
+    { icon: 'home', label: 'Inicio', path: 'home' },
     { icon: 'inventory', label: 'Productos', path: 'products' },
     { icon: 'shopping_cart', label: 'Ventas', path: 'sales' },
-    { icon: 'analytics', label: 'Reportes', path: 'reports' },
-    { icon: 'settings', label: 'Configuración', path: 'settings' },
   ];
 
   constructor() {

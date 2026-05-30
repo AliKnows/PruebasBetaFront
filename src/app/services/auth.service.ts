@@ -26,7 +26,7 @@ export class AuthService {
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credentials).pipe(
       tap(response => {
         if (response.access_token) {
-          localStorage.setItem('access_token', response.access_token);
+          localStorage.setItem('token', response.access_token);
           localStorage.setItem('user', JSON.stringify(response.user));
         }
       })
@@ -34,12 +34,12 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem('access_token');
+    localStorage.removeItem('token');
     localStorage.removeItem('user');
   }
 
   getToken(): string | null {
-    return localStorage.getItem('access_token');
+    return localStorage.getItem('token');
   }
 
   isLoggedIn(): boolean {

@@ -33,17 +33,19 @@ export class Sales implements OnInit {
   };
 
   searchTerm = signal('');
+  successMessage = signal<string | null>(null);
+  errorMessage = signal<string | null>(null);
   
   filteredProducts = computed(() => {
     const term = this.searchTerm().toLowerCase();
     const allProducts = this.products();
     return Array.isArray(allProducts) 
-      ? allProducts.filter(p => p.nombre.toLowerCase().includes(term) || p.id.toString().includes(term))
+      ? allProducts.filter(p => p.name.toLowerCase().includes(term) || p.id.toString().includes(term))
       : [];
   });
 
   subtotal = computed(() => {
-    return this.cart().reduce((acc, item) => acc + (item.product.precio * item.quantity), 0);
+    return this.cart().reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
   });
 
   total_amount = computed(() => {
@@ -107,21 +109,25 @@ export class Sales implements OnInit {
       items: this.cart().map(item => ({
         product_id: item.product.id,
         quantity: item.quantity,
-        price: item.product.precio
+        price: item.product.price
       }))
     };
 
     this.productService.saveSale(saleData).subscribe({
       next: () => {
-        alert('Venta realizada con éxito');
+        this.successMessage.set('Venta realizada con éxito');
+        this.errorMessage.set(null);
         this.cart.set([]);
         this.saleForm.description = '';
         this.loadProducts();
         this.isSaving.set(false);
+        // Limpiar mensaje después de 3 segundos
+        setTimeout(() => this.successMessage.set(null), 3000);
       },
       error: (err) => {
         console.error('Error saving sale:', err);
-        alert('Error al procesar la venta. Revisa los campos obligatorios.');
+        this.errorMessage.set('Error al procesar la venta. Revisa los campos obligatorios.');
+        this.successMessage.set(null);
         this.isSaving.set(false);
       }
     });

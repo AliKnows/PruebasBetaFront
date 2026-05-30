@@ -1,3 +1,78 @@
-/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
 
-@import 'tailwindcss';
+@theme {
+  /* Reddit + Enterprise Palette */
+  --color-reddit-blue: #0079D3;
+  --color-reddit-orange: #FF4500;
+  --color-reddit-bg: #DAE0E6;
+  --color-reddit-card: #FFFFFF;
+  --color-reddit-border: #EDEFF1;
+  --color-reddit-text: #1C1C1C;
+  --color-reddit-gray: #787C7E;
+  
+  --font-sans: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-reddit-bg text-reddit-text font-sans antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-reddit-text font-semibold tracking-tight;
+  }
+}
+
+@layer components {
+  .enterprise-card {
+    @apply bg-white border border-reddit-border rounded-md shadow-sm transition-all hover:border-reddit-gray/30;
+  }
+
+  .enterprise-button-primary {
+    @apply px-4 py-1.5 bg-reddit-blue text-white rounded-full font-bold text-sm transition-all hover:bg-reddit-blue/90 active:scale-95 disabled:opacity-50;
+  }
+
+  .enterprise-button-secondary {
+    @apply px-4 py-1.5 bg-transparent border border-reddit-blue text-reddit-blue rounded-full font-bold text-sm transition-all hover:bg-reddit-blue/5 active:scale-95;
+  }
+
+  .enterprise-input {
+    @apply w-full bg-[#F6F7F8] border border-reddit-border rounded-md px-4 py-2 text-sm focus:bg-white focus:border-reddit-blue focus:outline-none transition-all placeholder:text-reddit-gray;
+  }
+
+  .enterprise-table-header {
+    @apply px-6 py-3 text-[10px] font-bold text-reddit-gray uppercase tracking-wider bg-white border-b border-reddit-border;
+  }
+
+  /* Glassmorphism Utilities */
+  .glass-container {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  }
+
+  .login-bg {
+    background-image: url('/assets/img/fondoLogin.gif');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .dashboard-bg {
+    background-image: url('/assets/img/fondoLogin1.gif');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+
+  .global-bg {
+    background-image: url('/assets/img/fondoLogin3.gif');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+}

@@ -1,0 +1,97 @@
+<div class="space-y-6 animate-in fade-in duration-500 dashboard-bg p-6 rounded-md relative overflow-hidden">
+  <!-- Local overlay for Dashboard Home content area -->
+  <div class="absolute inset-0 bg-white/60 backdrop-blur-[2px]"></div>
+
+  <div class="relative z-10 space-y-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+      <h2 class="text-lg font-bold">Dashboard Summary</h2>
+      <div class="flex items-center gap-2">
+        <button (click)="loadData()" class="enterprise-button-secondary !py-1 text-xs bg-white/80">Refresh Data</button>
+      </div>
+    </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading()" class="flex justify-center py-20">
+    <div class="animate-spin h-8 w-8 border-2 border-reddit-blue border-t-transparent rounded-full"></div>
+  </div>
+
+  <div *ngIf="!isLoading()" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div *ngFor="let card of [
+      { label: 'Total Sales', value: (summary()?.total_sales ?? 0) | number:'1.2-2', icon: 'payments', prefix: '$', color: 'reddit-blue' },
+      { label: 'Transactions', value: summary()?.transactions_count ?? 0, icon: 'receipt_long', color: 'reddit-text' },
+      { label: 'Active Products', value: summary()?.active_products ?? 0, icon: 'inventory_2', color: 'reddit-text' },
+      { label: 'Low Stock Alerts', value: lowStock().length, icon: 'warning', color: 'reddit-orange' }
+    ]" class="enterprise-card p-4">
+      <div class="flex items-start justify-between">
+        <div>
+          <p class="text-[10px] font-bold text-reddit-gray uppercase tracking-wider">{{ card.label }}</p>
+          <h3 class="text-xl font-bold mt-1" [ngClass]="'text-' + card.color">{{ card.prefix || '' }}{{ card.value }}</h3>
+        </div>
+        <div class="p-2 bg-reddit-bg rounded-full text-reddit-gray">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+          </svg>
+        </div>
+      </div>
+      <div class="mt-4 flex items-center gap-1">
+        <span class="text-[10px] font-bold text-emerald-500">+12.5%</span>
+        <span class="text-[10px] text-reddit-gray">from last period</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- Top Clients -->
+    <div class="lg:col-span-7 enterprise-card overflow-hidden">
+      <div class="px-6 py-4 border-b border-reddit-border flex items-center justify-between bg-white">
+        <h3 class="text-sm font-bold">Top Performing Clients</h3>
+        <button class="text-xs font-bold text-reddit-blue hover:underline">View All</button>
+      </div>
+      <div class="divide-y divide-reddit-border">
+        <div *ngFor="let client of topClients()" class="px-6 py-4 flex items-center justify-between hover:bg-reddit-bg/30 transition-colors">
+          <div class="flex items-center gap-3">
+            <div class="h-8 w-8 rounded-full bg-reddit-bg flex items-center justify-center font-bold text-reddit-blue text-xs border border-reddit-border">
+              {{ client.nombre?.charAt(0) }}
+            </div>
+            <div>
+              <p class="text-sm font-bold text-reddit-text hover:underline cursor-pointer">{{ client.nombre }}</p>
+              <p class="text-[10px] text-reddit-gray font-medium">Verified Account • {{ client.total_compras }} transactions</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <p class="text-sm font-bold text-reddit-blue">${{ client.monto_total | number:'1.2-2' }}</p>
+            <p class="text-[9px] font-bold text-emerald-500">↑ High value</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inventory -->
+    <div class="lg:col-span-5 enterprise-card overflow-hidden">
+      <div class="px-6 py-4 border-b border-reddit-border bg-white">
+        <h3 class="text-sm font-bold">Inventory Alerts</h3>
+      </div>
+      <div class="p-4 space-y-3">
+        <div *ngFor="let product of lowStock()" class="p-3 border border-reddit-border rounded-md hover:bg-reddit-bg/30 transition-colors flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="h-2 w-2 rounded-full" [ngClass]="product.stock === 0 ? 'bg-reddit-orange' : 'bg-amber-400'"></div>
+            <div>
+              <p class="text-xs font-bold text-reddit-text">{{ product.name }}</p>
+              <p class="text-[10px] text-reddit-gray">ID: {{ product.id }}</p>
+            </div>
+          </div>
+          <span class="px-2 py-0.5 bg-reddit-orange/10 text-reddit-orange text-[10px] font-bold rounded">
+            {{ product.stock }} left
+          </span>
+        </div>
+        <div *ngIf="lowStock().length === 0" class="text-center py-10">
+          <p class="text-xs text-reddit-gray font-medium">All systems normal. No stock alerts.</p>
+        </div>
+      </div>
+      <div class="p-4 border-t border-reddit-border bg-reddit-bg/10">
+        <button [routerLink]="['/dashboard/products']" class="enterprise-button-primary w-full text-xs">Go to Inventory</button>
+      </div>
+    </div>
+  </div>
+</div>
