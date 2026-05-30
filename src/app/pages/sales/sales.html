@@ -1,0 +1,170 @@
+<div class="space-y-6 max-w-7xl mx-auto">
+  <!-- Header de Transacción -->
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
+    <div>
+      <h2 class="text-2xl font-bold text-slate-800">Nueva Venta</h2>
+      <p class="text-slate-500 text-sm">Registro de transacción vinculado a Laravel</p>
+    </div>
+    <div class="bg-indigo-50 px-6 py-3 rounded-2xl border border-indigo-100">
+      <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Estado</span>
+      <div class="text-xl font-black text-indigo-700 uppercase">Activo</div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    
+    <!-- Formulario y Selección (2/3) -->
+    <div class="lg:col-span-2 space-y-6">
+      
+      <!-- Datos de la Transacción -->
+      <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 space-y-4">
+        <h3 class="font-bold text-slate-800 flex items-center gap-2">
+          <svg class="h-5 w-5 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          Datos de la Transacción
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-400 uppercase mb-1 ml-1">ID Cliente</label>
+            <input type="number" [(ngModel)]="saleForm.client_id"
+                   class="w-full px-4 py-2.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all text-slate-700">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-400 uppercase mb-1 ml-1">Método de Pago (ID)</label>
+            <select [(ngModel)]="saleForm.payment_method_id"
+                    class="w-full px-4 py-2.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all text-slate-700">
+              <option [value]="1">Efectivo (1)</option>
+              <option [value]="2">Transferencia (2)</option>
+              <option [value]="3">Tarjeta (3)</option>
+            </select>
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-xs font-bold text-slate-400 uppercase mb-1 ml-1">Descripción / Notas</label>
+            <textarea [(ngModel)]="saleForm.description" rows="2"
+                      placeholder="Ej. Venta con descuento especial..."
+                      class="w-full px-4 py-2.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all text-slate-700 resize-none"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Buscador de Productos -->
+      <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 space-y-4">
+        <h3 class="font-bold text-slate-800 flex items-center gap-2">
+          <svg class="h-5 w-5 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          Seleccionar Productos
+        </h3>
+        <div class="relative">
+          <input 
+            type="text" 
+            placeholder="Buscar por nombre o ID..." 
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="searchTerm.set($event)"
+            class="w-full pl-10 pr-4 py-3 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500 transition-all">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+
+        <!-- Lista Filtrada -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
+          <div *ngFor="let product of filteredProducts()" 
+               (click)="addToCart(product)"
+               class="p-3 border border-slate-100 rounded-2xl hover:border-indigo-300 hover:bg-indigo-50/30 cursor-pointer transition-all flex justify-between items-center group">
+            <div>
+              <div class="font-bold text-slate-700 text-sm">{{ product.nombre }}</div>
+              <div class="text-[10px] text-slate-400 font-bold">STOCK: {{ product.stock }} | ${{ product.precio }}</div>
+            </div>
+            <div class="text-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resumen y Carrito (1/3) -->
+    <div class="lg:col-span-1">
+      <div class="bg-white rounded-3xl shadow-xl border border-slate-100 flex flex-col h-full sticky top-8">
+        <div class="p-6 border-b border-slate-100">
+          <h3 class="font-bold text-slate-800">Detalle de la Venta</h3>
+          <p class="text-xs text-slate-400 mt-1">{{ cart().length }} ítems añadidos</p>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-4 space-y-3 min-h-[300px]">
+          <div *ngFor="let item of cart()" class="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl group transition-all hover:bg-slate-100">
+            <div class="flex-1">
+              <h5 class="text-sm font-bold text-slate-800">{{ item.product.nombre }}</h5>
+              <div class="flex justify-between items-center mt-1">
+                <span class="text-[10px] font-bold text-slate-400">CANT: {{ item.quantity }} x ${{ item.product.precio }}</span>
+                <span class="text-sm font-bold text-indigo-600">${{ item.product.precio * item.quantity | number:'1.2-2' }}</span>
+              </div>
+            </div>
+            <button (click)="removeFromCart(item.product.id)" class="p-1.5 text-slate-300 hover:text-red-500 transition-colors">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <div *ngIf="cart().length === 0" class="flex flex-col items-center justify-center h-full text-slate-300 py-10">
+            <svg class="h-12 w-12 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            </svg>
+            <p class="text-xs font-bold mt-2 uppercase tracking-tighter">Carrito vacío</p>
+          </div>
+        </div>
+
+        <div class="p-6 bg-slate-900 rounded-b-3xl text-white">
+          <div class="space-y-2 mb-4 border-b border-slate-800 pb-4">
+            <div class="flex justify-between text-xs font-medium text-slate-500">
+              <span>SUBTOTAL</span>
+              <span>${{ subtotal() | number:'1.2-2' }}</span>
+            </div>
+            <div class="flex justify-between text-xs font-medium text-slate-500">
+              <span>IMPUESTOS</span>
+              <span>+ ${{ saleForm.tax_amount | number:'1.2-2' }}</span>
+            </div>
+            <div class="flex justify-between text-xs font-medium text-red-400">
+              <span>DESCUENTO</span>
+              <span>- ${{ saleForm.discount_amount | number:'1.2-2' }}</span>
+            </div>
+          </div>
+          <div class="flex justify-between items-center mb-6">
+            <span class="text-slate-400 text-sm font-medium">TOTAL FINAL</span>
+            <span class="text-3xl font-black text-indigo-400">${{ total_amount() | number:'1.2-2' }}</span>
+          </div>
+          <button 
+            (click)="confirmSale()"
+            [disabled]="cart().length === 0 || isSaving()"
+            class="w-full py-4 bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-800 disabled:text-slate-600 rounded-2xl font-bold transition-all shadow-lg shadow-indigo-500/20 active:scale-95 flex justify-center items-center gap-2">
+            <span *ngIf="!isSaving()">REGISTRAR VENTA</span>
+            <span *ngIf="isSaving()" class="flex items-center gap-2">
+              <svg class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              PROCESANDO...
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+w-5 text-white" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              PROCESANDO...
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
